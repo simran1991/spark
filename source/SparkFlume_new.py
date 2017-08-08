@@ -19,6 +19,7 @@ parts = [
     r'"(?P<referer>.*)"',               # referer "%{Referer}i"
     r'"(?P<agent>.*)"',                 # user agent "%{User-agent}i"
 ]
+
 pattern = re.compile(r'\s+'.join(parts)+r'\s*\Z')
 
 schema=StructType([StructField("statuscode",StringType(),True),StructField("counts",StringType(),True)])
@@ -36,8 +37,9 @@ def saveData(time,rdd):
             .mode('append')\
             .options(table="logs", keyspace="movielens")\
             .save()
+            
         print("current time is " + time.strftime("%H:%M:%S"))
-        df.show()        
+        df.show()
     
         
                 
@@ -59,12 +61,12 @@ def extractURLRequest(line):
            #if (len(requestFields) > 1):
                 #return requestFields[1]
 
-def updateFunction(newValues,count):
-    print(newValues)
+def updateFunction(newValue,count):
+    print(newValue)
     print(count)
     if count is None:
         count=0
-    return sum(newValues,count)
+    return sum(newValue,count)
 
 def createSparkStreamingContext():
     
@@ -79,7 +81,7 @@ def createSparkStreamingContext():
     urlCounts = urls.map(lambda x: (x, 1)).updateStateByKey(updateFunction)
     #urlCounts.foreachRDD(lambda rdd: printData(rdd))
     #urlCounts.pprint()
-    urlCounts.cache()
+    #urlCounts.cache()
     
     urlCounts.foreachRDD(saveData)
     ssc.checkpoint("hdfs:///user/maria_dev/checkpoint")

@@ -144,7 +144,7 @@ Setting up flume
 
 login into maria dev
 cd /usr/hdp/current/flume-server
-bin/flume-ng agent --conf conf --conf-file ~/example.conf --name a1 -Dflume.root.logger=INFO,console
+bin/flume-ng agent --conf conf --conf-file ~/sparksteaming.conf --name a1 -Dflume.root.logger=INFO,console
 
 test telnet localhost 44444
 
@@ -153,6 +153,7 @@ exit telnet using cntrl+ ] and then type quit
 using streaming with flume
 export SPARK_MAJOR_VERION=2
 spark-submit --packages org.apache.spark:spark-streaming-flume_2.11:2.0.0 SparkFlume.py    --->>supplying streaming connector for spark 
+
 
 
 
